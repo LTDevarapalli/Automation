@@ -7,15 +7,19 @@ import org.testng.Assert;
 import org.testng.annotations.*;
 
 import com.flowDrive.initialize.AndroidDriverr;
+import com.flowDrive.pages.EmergencyPage;
 import com.flowDrive.pages.HomePage;
 import com.flowDrive.pages.LoginPage;
 import com.flowDrive.pages.RegisterPage;
 import com.helpers.Helpers;
 
+import io.appium.java_client.android.AndroidKeyCode;
+
 public class WorkFlow1_Test {
 	LoginPage loginPage;
 	RegisterPage registerPage;
 	HomePage homePage;
+	EmergencyPage emergencyPage;
 	WebDriverWait wait;
 
 	@BeforeClass
@@ -23,6 +27,7 @@ public class WorkFlow1_Test {
 		loginPage = new LoginPage();
 		registerPage = new RegisterPage();
 		homePage = new HomePage();
+		emergencyPage = new EmergencyPage();
 		wait = new WebDriverWait(AndroidDriverr.driver, 10);
 	}
 
@@ -79,6 +84,29 @@ public class WorkFlow1_Test {
 		}
 	}
 
+
+	@Test
+	public void emergencyOrAccident() {
+		try {
+			loginTest();
+			emergencyPage.emergencyButton.click();
+			emergencyPage.breakDown.click();
+			emergencyPage.callNow.click();
+			wait.until(ExpectedConditions.visibilityOf(emergencyPage.demoMSG));
+			emergencyPage.demoMSG.click();
+			AndroidDriverr.driver.navigate().back();
+			Thread.sleep(3000);
+			wait.until(ExpectedConditions.visibilityOf(emergencyPage.emergencyButton));
+			emergencyPage.emergencyButton.click();
+			emergencyPage.accidentBTN.click();
+			Assert.assertTrue(emergencyPage.callNowTXT.getText().equals("If you need our assistance, please call us now."), "Text should be matched, call now screen");
+			
+		} catch (Exception e) {
+			Assert.fail("Error in login testcase");
+		}
+	}
+	
+	
 	@AfterClass
 	public void afterMethod() {
 		AndroidDriverr.driver.closeApp();
