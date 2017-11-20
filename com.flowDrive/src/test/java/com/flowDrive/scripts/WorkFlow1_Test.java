@@ -11,6 +11,7 @@ import com.flowDrive.pages.EmergencyPage;
 import com.flowDrive.pages.HomePage;
 import com.flowDrive.pages.LoginPage;
 import com.flowDrive.pages.RegisterPage;
+import com.flowDrive.pages.SocialPage;
 import com.helpers.Helpers;
 
 import io.appium.java_client.android.AndroidKeyCode;
@@ -20,6 +21,7 @@ public class WorkFlow1_Test {
 	RegisterPage registerPage;
 	HomePage homePage;
 	EmergencyPage emergencyPage;
+	SocialPage socialPage;
 	WebDriverWait wait;
 
 	@BeforeClass
@@ -28,6 +30,7 @@ public class WorkFlow1_Test {
 		registerPage = new RegisterPage();
 		homePage = new HomePage();
 		emergencyPage = new EmergencyPage();
+		socialPage = new SocialPage();
 		wait = new WebDriverWait(AndroidDriverr.driver, 10);
 	}
 
@@ -105,6 +108,30 @@ public class WorkFlow1_Test {
 			Assert.fail("Error in login testcase");
 		}
 	}
+	
+	
+	@Test
+	public void socialNetowrk() {
+		try {
+			loginTest();
+			socialPage.socialLINK.click();
+			socialPage.myScoresLNK.click();
+			Assert.assertTrue(socialPage.myscoresTXT.getText().trim().equals("MY SCORES"), "text should be my scores");
+			AndroidDriverr.driver.navigate().back();
+			socialPage.friendsLNK.click();
+			Assert.assertTrue(socialPage.friendsTXT.getText().trim().equals("FRIENDS"), "text should be friends");
+			socialPage.myProfileLNK.click();
+			socialPage.gettingStartedTXT.sendKeys(Helpers.randomString(3));
+			socialPage.nextBTN.click();
+			socialPage.nextBTN2.click();
+			socialPage.aboutMeTXT.sendKeys(Helpers.randomString(5));
+			socialPage.nextBTNProf.click();
+
+		} catch (Exception e) {
+			Assert.fail("Error in login testcase");
+		}
+	}
+	
 	
 	
 	@AfterClass
